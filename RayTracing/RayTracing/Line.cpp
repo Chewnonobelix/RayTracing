@@ -4,10 +4,10 @@
 
 Line::Line()
 {
+	m_vector << 0 << 0 << 0;
 }
 
-Line::Line(const Line& other): m_begin(other.begin()), m_end(other.end())
-{
+Line::Line(const Line& other): m_vector(other.vector()){
 }
 
 Line::~Line()
@@ -15,41 +15,31 @@ Line::~Line()
 }
 
 
-Point Line::begin() const
+QVector<double> Line::vector() const
 {
-	return m_begin;
+	return m_vector;
 }
 
-void Line::setBegin(Point b)
+void Line::setVector(QVector<double> v)
 {
-	m_begin = b;
+	m_vector = v;
 }
 
-Point Line::end() const
+void Line::setVector(double u, double v, double w)
 {
-	return m_end;
-}
-
-void Line::setEnd(Point e)
-{
-	m_end = e;
-}
-
-double Line::length() const
-{
-	double ret = (m_begin.x() - m_end.x())*(m_begin.x() - m_end.x()) + (m_begin.y() - m_end.y())*(m_begin.y() - m_end.y()) + (m_begin.z() - m_end.z())*(m_begin.z() - m_end.z());
-	return sqrt(ret);
+	m_vector[0] = u;
+	m_vector[1] = v;
+	m_vector[2] = w;
 }
 
 bool operator == (const Line& l1, const Line& l2)
 {
-	return l1.begin() == l2.begin() && l1.end() == l2.end();
+	return l1.vector() == l2.vector();
 }
 
 Line& Line::operator =(const Line& other)
 {
-	m_begin = other.begin();
-	m_end = other.end();
-
+	m_vector = other.vector();
+	
 	return *this;
 }
