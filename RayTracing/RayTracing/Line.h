@@ -8,6 +8,7 @@ class Line
 {
 private:
 	QVector<double> m_vector;
+	Point m_origin;
 
 public:
 	Line();
