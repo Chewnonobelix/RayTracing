@@ -85,7 +85,7 @@ Screen& Screen::operator=(const Screen& other)
 	m_v = other.v();
 	m_position = other.position();
 	m_width = other.width();
-	m_height = other.m_height();
+	m_height = other.height();
 	m_dir = other.dir();
 
 	return *this;

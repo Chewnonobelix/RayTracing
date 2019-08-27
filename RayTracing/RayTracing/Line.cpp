@@ -45,7 +45,7 @@ void Line::setVector(double u, double v, double w)
 
 bool operator == (const Line& l1, const Line& l2)
 {
-	return l1.vector() == l2.vector() && l1.origin == l2.origin();
+	return l1.vector() == l2.vector() && l1.origin() == l2.origin();
 }
 
 Line& Line::operator =(const Line& other)

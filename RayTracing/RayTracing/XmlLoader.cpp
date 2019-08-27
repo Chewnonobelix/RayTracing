@@ -51,5 +51,22 @@ Scene XmlLoader::load(QString filename)
 
 		ret.addLight(l);
 	}
+
+	auto screen = root.elementsByTagName("screen").at(0).toElement();
+	Screen s;
+
+	s.setWidth(screen.attribute("width").toInt());
+	s.setHeight(screen.attribute("height").toInt());
+	s.setDir(screen.attribute("dir").toInt());
+
+	auto pos = screen.elementsByTagName("position").at(0).toElement();
+	s.setPosition(Point(pos.attribute("x").toInt(), pos.attribute("y").toInt(), pos.attribute("z").toInt());
+	pos = screen.elementsByTagName("u").at(0).toElement();
+	s.setU({ pos.attribute("x").toInt(), pos.attribute("y").toInt(), pos.attribute("z").toInt() });
+	pos = screen.elementsByTagName("v").at(0).toElement();
+	s.setV({ pos.attribute("x").toInt(), pos.attribute("y").toInt(), pos.attribute("z").toInt() });
+
+	ret.addScreen(s);
+
 	return ret;
 }
