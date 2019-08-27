@@ -2,6 +2,7 @@
 
 #include <QList>
 #include "Sphere.h"
+#include "Light.h"
 
 class Scene
 {

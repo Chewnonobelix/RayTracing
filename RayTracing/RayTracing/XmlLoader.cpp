@@ -38,5 +38,18 @@ Scene XmlLoader::load(QString filename)
 		ret.addGeometry(s);
 	}
 
+	list = root.elementByTagName("light");
+
+	for (int i = 0; i < list.size(); i++)
+	{
+		auto el = list.at(i).toElement();
+		Light l;
+		l.setRed(el.attribute("red").toInt());
+		l.setGreen(el.attribute("green").toInt());
+		l.setBlue(el.attribute("blue").toInt());
+		l.setPower(el.attribute("power").toDouble());
+
+		ret.addLight(l);
+	}
 	return ret;
 }
