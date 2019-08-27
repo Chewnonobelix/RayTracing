@@ -63,3 +63,15 @@ bool Sphere::intersect(const Line& l) const
 
 	return delta >= 0;
 }
+
+bool operator < (const Sphere& s1, const Sphere& s2)
+{
+	double d1, d2;
+	Point c1, c2;
+	c1 = s1.center(); c2 = s2.center();
+
+	d1 = sqrt(c1.x()*c1.x() + c1.y()*c1.y() + c1.z()*c1.z());
+	d2 = sqrt(c2.x()*c2.x() + c2.y()*c2.y() + c2.z()*c2.z());
+
+	return (d1 - s1.radius()) < (d2 - s2.radius());
+}

@@ -15,6 +15,7 @@ public:
 	~Sphere();
 
 	friend bool operator == (const Sphere& s1, const Sphere& s2);
+	friend bool operator < (const Sphere& s1, const Sphere& s2);
 	Sphere& operator = (const Sphere& other);
 
 	Point center() const;
