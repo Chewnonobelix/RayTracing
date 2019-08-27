@@ -19,5 +19,9 @@ public:
 	void addGeometry(Sphere s);
 	void addLight(Light l);
 	void addScreen(Screen s);
+
+	QList<Sphere> spheres() const;
+	QList<Light> lights() const;
+	Screen screen() const;
 };
 

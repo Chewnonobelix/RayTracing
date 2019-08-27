@@ -25,3 +25,18 @@ void Scene::addScreen(Screen s)
 {
 	m_screen = s;
 }
+
+QList<Sphere> Scene::spheres() const
+{
+	return m_geometry;
+}
+
+QList<Light> Scene::lights() const
+{
+	return m_lights;
+}
+
+Screen Scene::screen() const
+{
+	return m_screen;
+}
