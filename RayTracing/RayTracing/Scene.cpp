@@ -18,7 +18,7 @@ void Scene::addGeometry(Sphere s)
 
 void Scene::addLight(Light l)
 {
-	m_lights << s;
+	m_lights << l;
 }
 
 void Scene::addScreen(Screen s)
