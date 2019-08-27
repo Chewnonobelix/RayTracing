@@ -17,11 +17,16 @@ Scene XmlLoader::load(QString filename)
 
 	QFile file(filename);
 	if (!file.open(QIODevice::ReadOnly))
+	{
+		qDebug() << "Cannot open file" << filename;
 		return ret;
-
+	}
 	QDomDocument doc;
 	if (!doc.setContent(&file))
+	{
+		qDebug() << "cannot set xml content" << filename;
 		return ret;
+	}
 
 	auto root = doc.documentElement();
 	auto list = root.elementsByTagName("sphere");
@@ -60,7 +65,7 @@ Scene XmlLoader::load(QString filename)
 	s.setDir(screen.attribute("dir").toInt());
 
 	auto pos = screen.elementsByTagName("position").at(0).toElement();
-	s.setPosition(Point(pos.attribute("x").toInt(), pos.attribute("y").toInt(), pos.attribute("z").toInt());
+	s.setPosition(Point(pos.attribute("x").toInt(), pos.attribute("y").toInt(), pos.attribute("z").toInt()));
 	pos = screen.elementsByTagName("u").at(0).toElement();
 	s.setU({ pos.attribute("x").toInt(), pos.attribute("y").toInt(), pos.attribute("z").toInt() });
 	pos = screen.elementsByTagName("v").at(0).toElement();

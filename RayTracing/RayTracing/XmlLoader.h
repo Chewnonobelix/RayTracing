@@ -3,6 +3,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QFile>
+#include <QDebug>
 #include "Scene.h"
 
 class XmlLoader
