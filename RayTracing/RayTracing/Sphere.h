@@ -24,5 +24,6 @@ public:
 	void setRadius(double r);
 
 	bool intersect(const Line& l) const;
+	double distanceTo(const Point& p) const;
 };
 
