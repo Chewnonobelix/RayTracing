@@ -94,5 +94,5 @@ void Scene::rayTracing()
 
 	}
 
-	qDebug()<<m_output.save("E:\\Dev\\RayTracing\\output.jpg");
+	qDebug()<<m_output.save(".\\output.jpg");
 }
