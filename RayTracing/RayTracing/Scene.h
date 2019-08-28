@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QImage>
+#include <qdebug.h>
 #include <QList>
 #include "Sphere.h"
 #include "Light.h"
