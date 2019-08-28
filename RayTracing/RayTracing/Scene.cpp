@@ -45,6 +45,18 @@ void Scene::rayTracing()
 {
 	m_output = m_output.scaled(m_screen.width(), m_screen.height());
 
+	QList<Sphere> ordered = spheres();
+	Point origin = screen().position();
+
+	auto sort = [](QList<Sphere>& list, Point origin) {
+		for (int i = 0; i < list.size(); i++)
+			for (int j = i + 1 j < list.size(); j++)
+				if (list[j].distanceTo(origin) < list[i].distanceTo(origin))
+					list.swapItemAt(i, j);
+	};
+
+	sort(ordered, origin);
+
 	for (int i = 1; i <= m_screen.width(); i++)
 	{
 		for (int j = 1; j <= m_screen.height(); j++)
@@ -55,19 +67,19 @@ void Scene::rayTracing()
 			p.setX((p.x() * m_screen.u()[0] + p.y() * m_screen.u()[1] + p.z() * m_screen.u()[2])*i);
 			p.setY((p.x() * m_screen.v()[0] + p.y() * m_screen.v()[1] + p.z() * m_screen.v()[2])*j);
 			p.setZ(p.x() * m_screen.orthogonal()[0] + p.y() * m_screen.orthogonal()[1] + p.z() * m_screen.orthogonal()[2]);
+			ray.setOrigin(p);
 
+			sort(ordered, p);
 			Sphere nearest = m_geometry.first();
-			for (auto s : m_geometry)
+			bool hit = false;
+
+			for (auto it = ordered.begin(); !hit && it != ordered.end(); it++)
 			{
-				if (s.intersect(ray))
+				if (hit = s.intersect(ray))
 				{
-					if (s.distanceTo(p) < nearest.distanceTo(p))
-					{
-						nearest = s;
-					}
+					nearest = *it;
 				}
 			}
-			ray.setOrigin(p);
 		}
 	}
 }
