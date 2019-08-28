@@ -39,7 +39,19 @@ Scene XmlLoader::load(QString filename)
 		Point c(center.attribute("x").toDouble(), center.attribute("y").toDouble(), center.attribute("z").toDouble());
 		s.setCenter(c);
 		s.setRadius(el.attribute("radius").toDouble());
-
+		Material m;
+		auto el2 = el.elementsByTagName("material").at(0).toElement();
+		auto el3 = el2.elementsByTagName("ambient");
+		if (!el3.isEmpty())
+		{
+			auto ambient = el3.at(0).toElement();
+			QColor a;
+			a.setRed(ambient.attribute("red").toInt());
+			a.setGreen(ambient.attribute("green").toInt());
+			a.setBlue(ambient.attribute("blue").toInt());
+			m.setAmbient(a);
+		}
+		s.setMaterial(m);
 		ret.addGeometry(s);
 	}
 
