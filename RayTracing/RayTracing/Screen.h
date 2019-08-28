@@ -8,6 +8,7 @@ class Screen
 private:
 	QVector<int> m_u;
 	QVector<int> m_v;
+	QVector<int> m_orthogonal;
 	int m_width;
 	int m_height;
 	Point m_position;
@@ -30,6 +31,9 @@ public:
 	void setPosition(Point p);
 	bool dir() const;
 	void setDir(bool dir);
+
+	QVector<int> orthogonal() const;
+	void calculateOrthogonal();
 
 	friend bool operator == (const Screen& s1, const Screen& s2);
 	Screen& operator=(const Screen& other);

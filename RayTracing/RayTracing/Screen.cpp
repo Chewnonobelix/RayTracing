@@ -5,10 +5,11 @@ Screen::Screen()
 {
 	m_u << 0 << 0 << 0;
 	m_v << 0 << 0 << 0;
+	m_orthogonal << 0 << 0 << 0;
 }
 
-Screen::Screen(const Screen& other): m_u(other.u()), m_v(other.v()), m_width(other.width()), 
-m_height(other.height()), m_position(other.position()), m_dir(other.dir())
+Screen::Screen(const Screen& other): m_u(other.u()), m_v(other.v()), m_orthogonal(other.orthogonal()),
+m_width(other.width()), m_height(other.height()), m_position(other.position()), m_dir(other.dir())
 {}
 
 Screen::~Screen()
@@ -22,6 +23,7 @@ QVector<int> Screen::u() const
 void Screen::setU(QVector<int> u)
 {
 	m_u = u;
+	calculateOrthogonal();
 }
 
 QVector<int> Screen::v() const
@@ -32,6 +34,7 @@ QVector<int> Screen::v() const
 void Screen::setV(QVector<int> v)
 {
 	m_v = v;
+	calculateOrthogonal();
 }
 
 int Screen::width() const
@@ -91,3 +94,14 @@ Screen& Screen::operator=(const Screen& other)
 	return *this;
 }
 
+QVector<int> Screen::orthogonal() const
+{
+	return m_orthogonal;
+}
+
+void Screen::calculateOrthogonal()
+{
+	m_orthogonal[0] = m_u[1]*m_v[2] - m_u[2]*m_v[1];
+	m_orthogonal[1] = m_u[0] * m_v[2] - m_u[2] * m_v[0];
+	m_orthogonal[2] = m_u[0] * m_v[1] - m_u[1] * m_v[0];
+}
