@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QImage>
 #include <QList>
 #include "Sphere.h"
 #include "Light.h"
@@ -11,6 +12,7 @@ private:
 	QList<Sphere> m_geometry;
 	QList<Light> m_lights;
 	Screen m_screen;
+	QImage m_output;
 
 public:
 	Scene();
@@ -23,5 +25,7 @@ public:
 	QList<Sphere> spheres() const;
 	QList<Light> lights() const;
 	Screen screen() const;
+
+	void rayTracing();
 };
 
