@@ -3,7 +3,7 @@
 Sphere::Sphere()
 {}
 
-Sphere::Sphere(const Sphere& other): m_center(other.center()), m_radius(other.radius())
+Sphere::Sphere(const Sphere& other): m_center(other.center()), m_radius(other.radius()), m_mat(other.material())
 {}
 
 Sphere::~Sphere()
@@ -18,6 +18,7 @@ Sphere& Sphere::operator = (const Sphere& other)
 {
 	m_center = other.center();
 	m_radius = other.radius();
+	m_mat = other.material();
 
 	return *this;
 }
@@ -82,4 +83,14 @@ double Sphere::distanceTo(const Point& p) const
 	ret += (c.y() - p.y())*(c.y() - p.y());
 	ret += (c.z() - p.z())*(c.z() - p.z());
 	return  sqrt(ret) - radius();
+}
+
+Material Sphere::material() const
+{
+	return m_mat;
+}
+
+void Sphere::setMaterial(const Material& m)
+{
+	m_mat = m;
 }

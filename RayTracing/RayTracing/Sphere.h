@@ -2,12 +2,14 @@
 
 #include "Point.h"
 #include "Line.h"
+#include "Material.h"
 
 class Sphere
 {
 private:
 	Point m_center;
 	double m_radius;
+	Material m_mat;
 
 public:
 	Sphere();
@@ -25,5 +27,8 @@ public:
 
 	bool intersect(const Line& l) const;
 	double distanceTo(const Point& p) const;
+
+	Material material() const;
+	void setMaterial(const Material& m);
 };
 
