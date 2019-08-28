@@ -10,7 +10,9 @@ Screen::Screen()
 
 Screen::Screen(const Screen& other): m_u(other.u()), m_v(other.v()), m_orthogonal(other.orthogonal()),
 m_width(other.width()), m_height(other.height()), m_position(other.position()), m_dir(other.dir())
-{}
+{
+	calculateOrthogonal();
+}
 
 Screen::~Screen()
 {}
@@ -91,6 +93,7 @@ Screen& Screen::operator=(const Screen& other)
 	m_height = other.height();
 	m_dir = other.dir();
 
+	calculateOrthogonal();
 	return *this;
 }
 
