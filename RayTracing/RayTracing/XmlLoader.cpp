@@ -41,7 +41,7 @@ Scene XmlLoader::load(QString filename)
 		s.setRadius(el.attribute("radius").toDouble());
 		Material m;
 		auto el2 = el.elementsByTagName("material").at(0).toElement();
-		auto el3 = el2.elementsByTagName("ambient");
+		auto el3 = el2.elementsByTagName("original");
 		if (!el3.isEmpty())
 		{
 			auto ambient = el3.at(0).toElement();
@@ -49,8 +49,9 @@ Scene XmlLoader::load(QString filename)
 			a.setRed(ambient.attribute("red").toInt());
 			a.setGreen(ambient.attribute("green").toInt());
 			a.setBlue(ambient.attribute("blue").toInt());
-			m.setAmbient(a);
+			m.setOriginal(a);
 		}
+		m.setDiffuse(el2.attribute("diffuse").toDouble());
 		s.setMaterial(m);
 		ret.addGeometry(s);
 	}

@@ -6,6 +6,7 @@ class Material
 {
 private:
 	QColor m_original;
+	double m_diffus;
 
 public:
 	Material();
@@ -16,5 +17,9 @@ public:
 
 	QColor original() const;
 	void setOriginal(QColor a);
+	double diffuse() const;
+	void setDiffuse(double d);
+
+	QColor diffusing(QVector<int> norm, QVector<int> inLight, QColor inColor) const;
 };
 
