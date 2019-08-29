@@ -1,6 +1,7 @@
 #include "Scene.h"
 
 
+#define rebound 0
 
 Scene::Scene()
 {
