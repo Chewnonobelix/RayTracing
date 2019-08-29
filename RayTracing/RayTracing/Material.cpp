@@ -6,7 +6,8 @@ Material::Material()
 {
 }
 
-Material::Material(const Material& other): m_original(other.original()), m_diffus(other.diffuse())
+Material::Material(const Material& other): m_original(other.original()), m_diffus(other.diffuse()),
+m_specularity(other.specularity()), m_shininess(other.shininess())
 {
 }
 
@@ -19,6 +20,8 @@ Material& Material::operator =(const Material& m)
 {
 	m_original = m.original();
 	m_diffus = m.diffuse();
+	m_specularity = m.specularity();
+	m_shininess = m.shininess();
 
 	return *this;
 }
@@ -43,6 +46,27 @@ void Material::setDiffuse(double d)
 	m_diffus = d;
 }
 
+double Material::specularity() const
+{
+	return m_diffus;
+}
+
+void Material::setSpecularity(double s)
+{
+	m_specularity = s;
+}
+
+int Material::shininess() const
+{
+	return m_shininess;
+}
+
+void Material::setShininess(int s)
+{
+	m_shininess = s;
+}
+
+
 QColor Material::diffusing(QVector<int> norm, QVector<int> inLight, QColor inColor) const
 {
 	double dot = norm[0]*inLight[0] + norm[1]*inLight[1]+norm[2]*inLight[2];
@@ -52,6 +76,28 @@ QColor Material::diffusing(QVector<int> norm, QVector<int> inLight, QColor inCol
 	inColor.setRed(inColor.red() * dot);
 	inColor.setGreen(inColor.green() * dot);
 	inColor.setBlue(inColor.blue() * dot);
+
+	return inColor;
+}
+
+QColor Material::specularing(QVector<int> eye, QVector<int> normal, QVector<int> light, QColor inColor)
+{
+	QVector<int> h;
+	h << (eye[0] + light[0]) / 2;
+	h << (eye[1] + light[1]) / 2;
+	h << (eye[2] + light[2]) / 2;
+
+	double dot = h[0] * norm[0] + h[1] * norm[1] + h[2] * norm[2];
+	double intensity = 1;
+
+	for (int i = 0; i < shininess(); i++)
+		intensity *= dot;
+
+	intensity *= specularity();
+
+	inColor.setRed(inColor.red() * intensity);
+	inColor.setGreen(inColor.green() * intensity);
+	inColor.setBlue(inColor.blue() * intensity);
 
 	return inColor;
 }

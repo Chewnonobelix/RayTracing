@@ -51,7 +51,10 @@ Scene XmlLoader::load(QString filename)
 			a.setBlue(ambient.attribute("blue").toInt());
 			m.setOriginal(a);
 		}
-		m.setDiffuse(el2.attribute("diffuse").toDouble());
+		m.setDiffuse(el2.attribute("diffuse", "0").toDouble());
+		m.setSpecularity(el2.attribute("specularity", "0").toDouble());
+		m.setShininess(el2.attribute("shine", "0").toInt());
+
 		s.setMaterial(m);
 		ret.addGeometry(s);
 	}
