@@ -6,7 +6,7 @@ Material::Material()
 {
 }
 
-Material::Material(const Material& other): m_ambient(other.ambient())
+Material::Material(const Material& other): m_original(other.original())
 {
 }
 
@@ -17,17 +17,17 @@ Material::~Material()
 
 Material& Material::operator =(const Material& m)
 {
-	m_ambient = m.ambient();
+	m_original = m.original();
 
 	return *this;
 }
 
-QColor Material::ambient() const
+QColor Material::original() const
 {
-	return m_ambient;
+	return m_original;
 }
 
-void Material::setAmbient(QColor a)
+void Material::setOriginal(QColor a)
 {
-	m_ambient = a;
+	m_original = a;
 }

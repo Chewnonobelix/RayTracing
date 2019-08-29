@@ -5,7 +5,7 @@
 class Material
 {
 private:
-	QColor m_ambient;
+	QColor m_original;
 
 public:
 	Material();
@@ -14,7 +14,7 @@ public:
 
 	Material& operator =(const Material& m);
 
-	QColor ambient() const;
-	void setAmbient(QColor a);
+	QColor original() const;
+	void setOriginal(QColor a);
 };
 

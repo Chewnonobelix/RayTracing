@@ -87,7 +87,7 @@ void Scene::rayTracing()
 			if(hit)
 				qDebug() << i << j << hit << m_screen.orthogonal();
 			if (hit)
-				m_output.setPixelColor(p.x(), p.y(), nearest.material().ambient());
+				m_output.setPixelColor(p.x(), p.y(), nearest.material().original());
 			else
 				m_output.setPixelColor(p.x(), p.y(), Qt::black);
 		}
