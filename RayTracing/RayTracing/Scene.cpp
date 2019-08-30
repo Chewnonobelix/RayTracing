@@ -76,22 +76,98 @@ void Scene::rayTracing()
 			Sphere nearest = !m_geometry.isEmpty() ? m_geometry.first() : Sphere();
 			bool hit = false;
 
+			Point nearestPoint;
+
 			for (auto it = ordered.begin(); !hit && it != ordered.end(); it++)
 			{
-				if (hit = it->intersect(ray))
+				if (hit = it->intersect(ray, nearestPoint))
 				{
 					nearest = *it;
 				}
 			}
 
 			if (hit)
-				m_output.setPixelColor(p.x(), p.y(), nearest.material().original());
+			{
+				QColor c = recursiveRay(nearest, p, nearestPoint, 1);
+				m_output.setPixelColor(p.x(), p.y(), c);
+			}
 			else
 				m_output.setPixelColor(p.x(), p.y(), Qt::black);
 		}
 
 	}
 }
+
+QColor Scene::recursiveRay(Sphere s, Point init, Point end, int r)
+{
+	if (r == 0)
+		return m_ambient;
+
+	QList<Sphere> ordered = spheres();
+	
+	sort(ordered, end);
+	QColor ret;
+	ret.setRed(s.material().original().red());
+	ret.setGreen(s.material().original().green());
+	ret.setBlue(s.material().original().blue());
+
+	//qDebug() << "Lkights" << lights().size();
+	QVector<double> normalPoint;
+	normalPoint << end.x() - s.center().x() << end.y() - s.center().y() << end.z() - s.center().z();
+
+	auto getNorm = [](QVector<double> vec) {
+		return sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]);
+	};
+
+	int touchLight = 0;
+	for (auto it : lights())
+	{
+		
+
+		Line ray;
+		ray.setOrigin(end);
+
+		QVector<double> vec;
+		vec << it.position().x() - end.x() << it.position().y() - end.y() << it.position().z() - end.z();
+		double norm = getNorm(vec);;
+		vec[0] /= norm; vec[1] /= norm; vec[2] /= norm;
+
+		ray.setVector(vec);
+
+		double theta = 0;
+		theta = normalPoint[0] * vec[0] + normalPoint[1] * vec[1] + normalPoint[2] * vec[2];
+		theta /= (getNorm(normalPoint) * getNorm(vec));
+		double angle = acos(theta);
+
+		if (angle > pi/4)
+			continue;
+
+		bool otherHit = false;
+		Point pt;
+		for (auto it2 : spheres())
+			otherHit = !it2.intersect(ray, pt);
+
+		if (otherHit)
+			continue;
+
+		touchLight++;
+		QVector<double> normal;
+		normal << (end.x() - s.center().x()) << (end.y() - s.center().y()) << (end.z() - s.center().z());
+		QColor nColor = s.material().diffusing(normal , ray.vector(), QColor(it.red(), it.green(), it.blue()));
+
+		int r, nr, g, ng, b, nb;
+		r = ret.red(); g = ret.green(); b = ret.blue();
+		nr = nColor.red(); ng = nColor.green(); nb = nColor.blue();
+
+		ret.setRed((ret.red() + nColor.red())/2);
+		ret.setGreen((ret.green() + nColor.green())/2);
+		ret.setBlue((ret.blue() + nColor.blue())/2);
+	}	
+
+
+	return ret;
+}
+
 
 void Scene::save(QString filename)
 {

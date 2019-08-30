@@ -7,7 +7,7 @@
 #include "Light.h"
 #include "Screen.h"
 
-#define rebound 0
+#define rebound 1
 
 class Scene
 {
@@ -16,8 +16,11 @@ private:
 	QList<Light> m_lights;
 	Screen m_screen;
 	QImage m_output;
+	QColor m_ambient;
 
 	void sort(QList<Sphere>& list, Point origin);
+	QColor recursiveRay(Sphere s, Point init , Point touch, int r);
+
 public:
 	Scene();
 	~Scene();
