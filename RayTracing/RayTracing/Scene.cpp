@@ -1,7 +1,6 @@
 #include "Scene.h"
 
 
-#define rebound 0
 
 Scene::Scene()
 {
@@ -95,5 +94,7 @@ void Scene::rayTracing()
 
 	}
 
-	qDebug()<<m_output.save(".\\output.jpg");
+void Scene::save(QString filename)
+{
+	qDebug() << m_output.save(filename);
 }

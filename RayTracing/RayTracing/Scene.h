@@ -7,6 +7,8 @@
 #include "Light.h"
 #include "Screen.h"
 
+#define rebound 0
+
 class Scene
 {
 private:
@@ -28,5 +30,7 @@ public:
 	Screen screen() const;
 
 	void rayTracing();
+
+	void save(QString filename);
 };
 
