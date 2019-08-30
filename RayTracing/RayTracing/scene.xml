@@ -10,7 +10,14 @@
 			<original red="255" green="255" blue="255" />		
 		</material>
 	</sphere>
-	<light red="0" green="0" blue="250" poweer="1">
+	<light red="0" green="0" blue="250" power="1">
 		<position x="0" y="0" z="0" />
 	</light>
+	<light red="0" green="250" blue="0" power="1">
+		<position x="320" y="240" z="0" />
+	</light>
+	<light red="255" green="0" blue="0" power="1">
+		<position x="0" y="120" z="0" />
+	</light>
+
 </scene>
