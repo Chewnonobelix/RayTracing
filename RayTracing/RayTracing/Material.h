@@ -27,6 +27,6 @@ public:
 	void setShininess(int s);
 
 	QColor diffusing(QVector<int> norm, QVector<int> inLight, QColor inColor) const;
-	QColor specularing(QVector<int> eye, QVector<int> normal, QVector<int> light, QColor inColor)
+	QColor specularing(QVector<int> eye, QVector<int> normal, QVector<int> light, QColor inColor) const;
 };
 

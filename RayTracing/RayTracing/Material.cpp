@@ -80,14 +80,14 @@ QColor Material::diffusing(QVector<int> norm, QVector<int> inLight, QColor inCol
 	return inColor;
 }
 
-QColor Material::specularing(QVector<int> eye, QVector<int> normal, QVector<int> light, QColor inColor)
+QColor Material::specularing(QVector<int> eye, QVector<int> normal, QVector<int> light, QColor inColor) const
 {
 	QVector<int> h;
 	h << (eye[0] + light[0]) / 2;
 	h << (eye[1] + light[1]) / 2;
 	h << (eye[2] + light[2]) / 2;
 
-	double dot = h[0] * norm[0] + h[1] * norm[1] + h[2] * norm[2];
+	double dot = h[0] * normal[0] + h[1] * normal[1] + h[2] * normal[2];
 	double intensity = 1;
 
 	for (int i = 0; i < shininess(); i++)
