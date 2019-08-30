@@ -67,22 +67,23 @@ void Material::setShininess(int s)
 }
 
 
-QColor Material::diffusing(QVector<int> norm, QVector<int> inLight, QColor inColor) const
+QColor Material::diffusing(QVector<double> norm, QVector<double> inLight, QColor inColor) const
 {
 	double dot = norm[0]*inLight[0] + norm[1]*inLight[1]+norm[2]*inLight[2];
 
 	dot *= diffuse();
 
-	inColor.setRed(inColor.red() * dot);
-	inColor.setGreen(inColor.green() * dot);
-	inColor.setBlue(inColor.blue() * dot);
+	
+	inColor.setRed(abs(inColor.red() * dot));
+	inColor.setGreen(abs(inColor.green() * dot));
+	inColor.setBlue(abs(inColor.blue() * dot));
 
 	return inColor;
 }
 
-QColor Material::specularing(QVector<int> eye, QVector<int> normal, QVector<int> light, QColor inColor) const
+QColor Material::specularing(QVector<double> eye, QVector<double> normal, QVector<double> light, QColor inColor) const
 {
-	QVector<int> h;
+	QVector<double> h;
 	h << (eye[0] + light[0]) / 2;
 	h << (eye[1] + light[1]) / 2;
 	h << (eye[2] + light[2]) / 2;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QColor>
-
+#include <cmath>
 class Material
 {
 private:
@@ -26,7 +26,7 @@ public:
 	int shininess() const;
 	void setShininess(int s);
 
-	QColor diffusing(QVector<int> norm, QVector<int> inLight, QColor inColor) const;
-	QColor specularing(QVector<int> eye, QVector<int> normal, QVector<int> light, QColor inColor) const;
+	QColor diffusing(QVector<double> norm, QVector<double> inLight, QColor inColor) const;
+	QColor specularing(QVector<double> eye, QVector<double> normal, QVector<double> light, QColor inColor) const;
 };
 
