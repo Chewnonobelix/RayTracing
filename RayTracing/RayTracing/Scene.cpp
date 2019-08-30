@@ -111,15 +111,15 @@ QColor Scene::recursiveRay(Sphere s, Point init, Point end, int r)
 	ret.setGreen(s.material().original().green());
 	ret.setBlue(s.material().original().blue());
 
-	//qDebug() << "Lkights" << lights().size();
 	QVector<double> normalPoint;
 	normalPoint << end.x() - s.center().x() << end.y() - s.center().y() << end.z() - s.center().z();
+	QVector<double> out;
+	out << init.x() - end.x() << init.y() - end.y() << init.z() - end.z();
 
 	auto getNorm = [](QVector<double> vec) {
 		return sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]);
 	};
 
-	int touchLight = 0;
 	for (auto it : lights())
 	{
 		
@@ -150,18 +150,20 @@ QColor Scene::recursiveRay(Sphere s, Point init, Point end, int r)
 		if (otherHit)
 			continue;
 
-		touchLight++;
 		QVector<double> normal;
 		normal << (end.x() - s.center().x()) << (end.y() - s.center().y()) << (end.z() - s.center().z());
-		QColor nColor = s.material().diffusing(normal , ray.vector(), QColor(it.red(), it.green(), it.blue()));
+		QColor nColor = s.material().combinateLight(out, normal , ray.vector(), QColor(it.red(), it.green(), it.blue()));
 
 		int r, nr, g, ng, b, nb;
 		r = ret.red(); g = ret.green(); b = ret.blue();
 		nr = nColor.red(); ng = nColor.green(); nb = nColor.blue();
 
-		ret.setRed((ret.red() + nColor.red())/2);
-		ret.setGreen((ret.green() + nColor.green())/2);
-		ret.setBlue((ret.blue() + nColor.blue())/2);
+		nr += r; nb += b; ng += g;
+		nr /= 2; nb /= 2; ng /= 2;
+
+		ret.setRed(nr < 255 ? nr : 255);
+		ret.setGreen(ng < 255 ? ng : 255);
+		ret.setBlue(nb < 255 ? nb : 255);
 	}	
 
 

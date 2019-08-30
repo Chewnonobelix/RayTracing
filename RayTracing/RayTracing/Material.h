@@ -10,6 +10,7 @@ private:
 	double m_specularity;
 	int m_shininess;
 
+	QVector<double> normalize(QVector<double> v) const;
 public:
 	Material();
 	Material(const Material& m);
@@ -28,5 +29,6 @@ public:
 
 	QColor diffusing(QVector<double> norm, QVector<double> inLight, QColor inColor) const;
 	QColor specularing(QVector<double> eye, QVector<double> normal, QVector<double> light, QColor inColor) const;
+	QColor combinateLight(QVector<double> eye, QVector<double> normal, QVector<double> light, QColor inColor) const;
 };
 
