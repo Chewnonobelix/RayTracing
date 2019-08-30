@@ -10,13 +10,13 @@ private:
 	double m_specularity;
 	int m_shininess;
 
-	QVector<double> normalize(QVector<double> v) const;
 public:
 	Material();
 	Material(const Material& m);
 	virtual ~Material();
 
 	Material& operator =(const Material& m);
+	QVector<double> normalize(QVector<double> v) const;
 
 	QColor original() const;
 	void setOriginal(QColor a);

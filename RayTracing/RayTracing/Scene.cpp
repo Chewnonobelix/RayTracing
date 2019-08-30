@@ -55,7 +55,7 @@ void Scene::rayTracing()
 
 	QList<Sphere> ordered = spheres();
 	Point origin = screen().position();
-
+	m_output.fill(Qt::black);
 
 	sort(ordered, origin);
 
@@ -82,17 +82,28 @@ void Scene::rayTracing()
 			{
 				if (hit = it->intersect(ray, nearestPoint))
 				{
-					nearest = *it;
+					QVector<double> vec;
+					vec << nearestPoint.x() - p.x() << nearestPoint.y() - p.y() << nearestPoint.z() - p.z();
+					double orthNorm, vecNorm;
+
+					orthNorm = sqrt(ray.vector()[0]* ray.vector()[0]+ ray.vector()[1]* ray.vector()[1]+ ray.vector()[2]* ray.vector()[2]);
+					vecNorm = sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]);
+					double dot = (ray.vector()[0] * vec[0] + ray.vector()[1] * vec[1] + ray.vector()[2] * vec[2]) / (orthNorm*vecNorm);
+					double theta = acos(dot);
+					
+					hit = (m_screen.dir() && theta != 0) || (!m_screen.dir() && theta == 0);
+
+					if(hit)
+						nearest = *it;
 				}
 			}
 
 			if (hit)
 			{
-				QColor c = recursiveRay(nearest, p, nearestPoint, 1);
+				QColor c = recursiveRay(nearest, p, nearestPoint, rebound);
 				m_output.setPixelColor(p.x(), p.y(), c);
 			}
-			else
-				m_output.setPixelColor(p.x(), p.y(), Qt::black);
+			
 		}
 
 	}
@@ -122,8 +133,6 @@ QColor Scene::recursiveRay(Sphere s, Point init, Point end, int r)
 
 	for (auto it : lights())
 	{
-		
-
 		Line ray;
 		ray.setOrigin(end);
 
@@ -144,26 +153,37 @@ QColor Scene::recursiveRay(Sphere s, Point init, Point end, int r)
 
 		bool otherHit = false;
 		Point pt;
+		Sphere nearest = !spheres().isEmpty() ? spheres().first() : Sphere();
+
 		for (auto it2 : spheres())
+		{
 			otherHit = !it2.intersect(ray, pt);
+			otherHit &= (it2.distanceTo(pt) < it2.distanceTo(it.position()));
 
+			if (it2.distanceTo(end) < nearest.distanceTo(end))
+				nearest = it2;
+		}
 		if (otherHit)
-			continue;
+		{
+			recursiveRay(nearest, end, pt, r - 1);
+		}
+		else
+		{
+			QVector<double> normal;
+			normal << (end.x() - s.center().x()) << (end.y() - s.center().y()) << (end.z() - s.center().z());
+			QColor nColor = s.material().combinateLight(out, normal, ray.vector(), QColor(it.red(), it.green(), it.blue()));
 
-		QVector<double> normal;
-		normal << (end.x() - s.center().x()) << (end.y() - s.center().y()) << (end.z() - s.center().z());
-		QColor nColor = s.material().combinateLight(out, normal , ray.vector(), QColor(it.red(), it.green(), it.blue()));
+			int r, nr, g, ng, b, nb;
+			r = ret.red(); g = ret.green(); b = ret.blue();
+			nr = nColor.red(); ng = nColor.green(); nb = nColor.blue();
 
-		int r, nr, g, ng, b, nb;
-		r = ret.red(); g = ret.green(); b = ret.blue();
-		nr = nColor.red(); ng = nColor.green(); nb = nColor.blue();
+			nr += r; nb += b; ng += g;
+			nr /= 2; nb /= 2; ng /= 2;
 
-		nr += r; nb += b; ng += g;
-		nr /= 2; nb /= 2; ng /= 2;
-
-		ret.setRed(nr < 255 ? nr : 255);
-		ret.setGreen(ng < 255 ? ng : 255);
-		ret.setBlue(nb < 255 ? nb : 255);
+			ret.setRed(nr < 255 ? nr : 255);
+			ret.setGreen(ng < 255 ? ng : 255);
+			ret.setBlue(nb < 255 ? nb : 255);
+		}
 	}	
 
 
