@@ -1,8 +1,11 @@
 #pragma once
 
+#include <qdebug.h>
 #include "Point.h"
 #include "Line.h"
 #include "Material.h"
+
+#define pi 3.14159265
 
 class Sphere
 {
@@ -25,7 +28,7 @@ public:
 	double radius() const;
 	void setRadius(double r);
 
-	bool intersect(const Line& l) const;
+	bool intersect(const Line& l, Point& nearest) const;
 	double distanceTo(const Point& p) const;
 
 	Material material() const;

@@ -43,9 +43,10 @@ void Sphere::setRadius(double r)
 	m_radius = r;
 }
 
-bool Sphere::intersect(const Line& l) const
+bool Sphere::intersect(const Line& l, Point& nearest) const
 {
 	double a = 0, b = 0, c = 0;
+
 
 	for (int i = 0; i < 3; i++)
 		a += l.vector()[i] * l.vector()[i];
@@ -61,6 +62,35 @@ bool Sphere::intersect(const Line& l) const
 	c = t2 - radius()*radius();
 
 	double delta = b*b - 4 * a*c;
+
+	double x1, x2;
+	if (delta >= 0)
+	{
+		x1 = (-b + sqrt(delta)) / (2 * a);
+		x2 = (-b - sqrt(delta)) / (2 * a);
+
+		Point p1, p2;
+		p1.setX(l.vector()[0] * x1 + l.origin().x());
+		p1.setY(l.vector()[1] * x1 + l.origin().y());
+		p1.setZ(l.vector()[2] * x1 + l.origin().z());
+
+		p2.setX(l.vector()[0] * x2 + l.origin().x());
+		p2.setY(l.vector()[1] * x2 + l.origin().y());
+		p2.setZ(l.vector()[2] * x2 + l.origin().z());
+
+		double d1, d2;
+		d1 = sqrt((l.origin().x() * p1.x())*(l.origin().x() * p1.x())+
+			(l.origin().y() * p1.y())*(l.origin().y() * p1.y())+
+			(l.origin().z() * p1.z())*(l.origin().z() * p1.z()));
+
+		d2 = sqrt((l.origin().x() * p2.x())*(l.origin().x() * p2.x()) +
+			(l.origin().y() * p2.y())*(l.origin().y() * p2.y()) +
+			(l.origin().z() * p2.z())*(l.origin().z() * p2.z()));
+	
+	
+		nearest = d1 < d2 ? p1 : p2;
+
+	}
 
 	return delta >= 0;
 }
