@@ -11,5 +11,6 @@ int main(int argc, char *argv[])
 	scene.rayTracing();
 
 	qDebug() << "End";
+	scene.save(".\\output.jpg");
 	return a.exec();
 }
