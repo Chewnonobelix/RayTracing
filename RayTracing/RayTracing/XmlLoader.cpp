@@ -69,7 +69,12 @@ Scene XmlLoader::load(QString filename)
 		l.setGreen(el.attribute("green").toInt());
 		l.setBlue(el.attribute("blue").toInt());
 		l.setPower(el.attribute("power").toDouble());
-
+		auto el2 = el.elementsByTagName("position").at(0).toElement();
+		Point p;
+		p.setX(el2.attribute("x").toInt());
+		p.setY(el2.attribute("y").toInt());
+		p.setZ(el2.attribute("z").toInt());
+		l.setPosition(p);
 		ret.addLight(l);
 	}
 

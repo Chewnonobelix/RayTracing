@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Point.h"
+
 class Light
 {
 private:
@@ -7,6 +9,7 @@ private:
 	int m_green;
 	int m_blue;
 	double m_power;
+	Point m_position;
 
 public:
 	Light();
@@ -21,6 +24,8 @@ public:
 	void setGreen(int g);
 	double power() const;
 	void setPower(double p);
+	Point position() const;
+	void setPosition(Point p);
 
 	Light& operator =(const Light&);
 	friend bool operator == (const Light& l1, const Light& l2);

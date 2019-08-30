@@ -3,7 +3,7 @@
 Light::Light()
 {}
 
-Light::Light(const Light& other): m_red(other.red()), m_green(other.green()), m_blue(other.blue()), m_power(other.power())
+Light::Light(const Light& other): m_red(other.red()), m_green(other.green()), m_blue(other.blue()), m_power(other.power()), m_position(other.position())
 {}
 
 Light::~Light()
@@ -49,12 +49,23 @@ void Light::setPower(double p)
 	m_power = p;
 }
 
+Point Light::position() const
+{
+	return m_power;
+}
+
+void Light::setPosition(Point p)
+{
+	m_position = p;
+}
+
 Light& Light::operator =(const Light& other)
 {
 	m_red = other.red();
 	m_green = other.green();
 	m_blue = other.blue();
 	m_power = other.power();
+	m_position = other.position();
 
 	return *this;
 }
