@@ -51,7 +51,7 @@ void Light::setPower(double p)
 
 Point Light::position() const
 {
-	return m_power;
+	return m_position;
 }
 
 void Light::setPosition(Point p)
