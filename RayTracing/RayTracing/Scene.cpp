@@ -41,6 +41,14 @@ Screen Scene::screen() const
 	return m_screen;
 }
 
+void Scene::sort(QList<Sphere>& list, Point origin) 
+{
+	for (int i = 0; i < list.size(); i++)
+		for (int j = i + 1; j < list.size(); j++)
+			if (list[j].distanceTo(origin) < list[i].distanceTo(origin))
+				list.swapItemsAt(i, j);
+}
+
 void Scene::rayTracing()
 {
 	m_output = QImage(m_screen.width(), m_screen.height(), QImage::Format_RGB32);
@@ -48,12 +56,6 @@ void Scene::rayTracing()
 	QList<Sphere> ordered = spheres();
 	Point origin = screen().position();
 
-	auto sort = [](QList<Sphere>& list, Point origin) {
-		for (int i = 0; i < list.size(); i++)
-			for (int j = i + 1; j < list.size(); j++)
-				if (list[j].distanceTo(origin) < list[i].distanceTo(origin))
-					list.swapItemsAt(i, j);
-	};
 
 	sort(ordered, origin);
 
@@ -65,7 +67,7 @@ void Scene::rayTracing()
 			Line ray;
 			ray.setVector(m_screen.orthogonal()[0], m_screen.orthogonal()[1], m_screen.orthogonal()[2]);
 			Point p = m_screen.position();
-			p.setX(p.x() + i*m_screen.u()[0] + j*m_screen.v()[0]);
+			p.setX(p.x() + i * m_screen.u()[0] + j * m_screen.v()[0]);
 			p.setY(p.y() + i * m_screen.u()[1] + j * m_screen.v()[1]);
 			p.setZ(p.z() + m_screen.u()[2] + m_screen.v()[2]);
 			ray.setOrigin(p);
@@ -76,16 +78,12 @@ void Scene::rayTracing()
 
 			for (auto it = ordered.begin(); !hit && it != ordered.end(); it++)
 			{
-				/*qDebug() << ray.origin().x() << ray.origin().y() << ray.origin().z();
-				qDebug() << ray.vector()<<m_screen.u()<<m_screen.v()<<m_screen.position().x()<<m_screen.position().y();
-				*/if (hit = it->intersect(ray))
+				if (hit = it->intersect(ray))
 				{
 					nearest = *it;
 				}
 			}
 
-			if(hit)
-				qDebug() << i << j << hit << m_screen.orthogonal();
 			if (hit)
 				m_output.setPixelColor(p.x(), p.y(), nearest.material().original());
 			else
@@ -93,6 +91,7 @@ void Scene::rayTracing()
 		}
 
 	}
+}
 
 void Scene::save(QString filename)
 {

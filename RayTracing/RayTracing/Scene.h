@@ -17,6 +17,7 @@ private:
 	Screen m_screen;
 	QImage m_output;
 
+	void sort(QList<Sphere>& list, Point origin);
 public:
 	Scene();
 	~Scene();
