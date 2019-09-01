@@ -22,6 +22,7 @@ Material XmlLoader::loadMaterial(QDomElement el)
 		a.setRed(ambient.attribute("red").toInt());
 		a.setGreen(ambient.attribute("green").toInt());
 		a.setBlue(ambient.attribute("blue").toInt());
+		a.setAlpha(ambient.attribute("alpha", "255").toInt());
 		m.setOriginal(a);
 	}
 	m.setDiffuse(el.attribute("diffuse", "0").toDouble());

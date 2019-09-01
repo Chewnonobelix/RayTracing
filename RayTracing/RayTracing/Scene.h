@@ -3,6 +3,7 @@
 #include <QImage>
 #include <qdebug.h>
 #include <QList>
+#include <cmath>
 #include <QSharedPointer>
 #include "Sphere.h"
 #include "Light.h"

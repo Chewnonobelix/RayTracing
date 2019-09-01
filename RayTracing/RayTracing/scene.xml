@@ -7,7 +7,7 @@
 	<sphere radius="50">
 		<center x="160" y="120" z="100" />
 		<material diffuse="1" specularity="100" shine="100000">
-			<original red="100" green="100" blue="100" />		
+			<original red="100" green="100" blue="100" alpha="0"/>		
 		</material>
 	</sphere>
 	

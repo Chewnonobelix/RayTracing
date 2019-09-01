@@ -172,6 +172,7 @@ QColor Scene::recursiveRay(GeometryPointer s, Point init, Point end, int r)
 			ret.setRed((nColor.red() + combinated.red())/2 < 255 ? (nColor.red() + combinated.red())/2 : 255);
 			ret.setBlue((nColor.blue() + combinated.blue())/2 < 255 ? (nColor.blue() + combinated.blue())/2 : 255);
 			ret.setBlue((nColor.green() + combinated.green())/2 < 255 ? (nColor.green() + combinated.green())/2 : 255);
+			ret.setAlpha(std::min(nColor.alpha(), combinated.alpha()));
 		}
 		else
 		{
@@ -189,6 +190,8 @@ QColor Scene::recursiveRay(GeometryPointer s, Point init, Point end, int r)
 			ret.setRed(nr < 255 ? nr : 255);
 			ret.setGreen(ng < 255 ? ng : 255);
 			ret.setBlue(nb < 255 ? nb : 255);
+			ret.setAlpha(std::min(ret.alpha(), nColor.alpha()));
+
 		}
 	}	
 
