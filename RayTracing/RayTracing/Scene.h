@@ -3,33 +3,36 @@
 #include <QImage>
 #include <qdebug.h>
 #include <QList>
+#include <QSharedPointer>
 #include "Sphere.h"
 #include "Light.h"
 #include "Screen.h"
 
 #define rebound 1
 
+typedef QSharedPointer<AbstractGeometry> GeometryPointer;
+
 class Scene
 {
 private:
-	QList<Sphere> m_geometry;
+	QList<GeometryPointer> m_geometry;
 	QList<Light> m_lights;
 	Screen m_screen;
 	QImage m_output;
 	QColor m_ambient;
 
-	void sort(QList<Sphere>& list, Point origin);
-	QColor recursiveRay(Sphere s, Point init , Point touch, int r);
+	void sort(QList<GeometryPointer>& list, Point origin);
+	QColor recursiveRay(GeometryPointer s, Point init , Point touch, int r);
 
 public:
 	Scene();
 	~Scene();
 
-	void addGeometry(Sphere s);
+	void addGeometry(GeometryPointer s);
 	void addLight(Light l);
 	void addScreen(Screen s);
 
-	QList<Sphere> spheres() const;
+	QList<GeometryPointer> spheres() const;
 	QList<Light> lights() const;
 	Screen screen() const;
 

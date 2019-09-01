@@ -4,15 +4,15 @@
 #include "Point.h"
 #include "Line.h"
 #include "Material.h"
+#include "AbstractGeometry.h"
 
 #define pi 3.14159265
 
-class Sphere
+class Sphere: public AbstractGeometry
 {
 private:
 	Point m_center;
 	double m_radius;
-	Material m_mat;
 
 public:
 	Sphere();
@@ -30,8 +30,6 @@ public:
 
 	bool intersect(const Line& l, Point& nearest) const;
 	double distanceTo(const Point& p) const;
-
-	Material material() const;
-	void setMaterial(const Material& m);
+	QVector<double> normalToPoint(const Point& p) const;
 };
 

@@ -19,7 +19,7 @@ Plan& Plan::operator =(const Plan& other)
 
 bool operator == (const Plan& p1, const Plan& p2)
 {
-	return p1.corners() == p2.corners;
+	return p1.corners() == p2.corners();
 }
 
 QVector<Point> Plan::corners() const

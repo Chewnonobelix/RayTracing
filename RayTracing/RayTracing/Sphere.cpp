@@ -3,7 +3,8 @@
 Sphere::Sphere()
 {}
 
-Sphere::Sphere(const Sphere& other): m_center(other.center()), m_radius(other.radius()), m_mat(other.material())
+Sphere::Sphere(const Sphere& other): AbstractGeometry(other), 
+m_center(other.center()), m_radius(other.radius())
 {}
 
 Sphere::~Sphere()
@@ -16,9 +17,11 @@ bool operator == (const Sphere& s1, const Sphere& s2)
 
 Sphere& Sphere::operator = (const Sphere& other)
 {
+	AbstractGeometry& t = *this;
+	t = other;
+
 	m_center = other.center();
 	m_radius = other.radius();
-	m_mat = other.material();
 
 	return *this;
 }
@@ -46,7 +49,6 @@ void Sphere::setRadius(double r)
 bool Sphere::intersect(const Line& l, Point& nearest) const
 {
 	double a = 0, b = 0, c = 0;
-
 
 	for (int i = 0; i < 3; i++)
 		a += l.vector()[i] * l.vector()[i];
@@ -115,12 +117,9 @@ double Sphere::distanceTo(const Point& p) const
 	return  sqrt(ret) - radius();
 }
 
-Material Sphere::material() const
+QVector<double> Sphere::normalToPoint(const Point& p) const
 {
-	return m_mat;
-}
-
-void Sphere::setMaterial(const Material& m)
-{
-	m_mat = m;
+	QVector<double> ret;
+	ret << (p.x() - center().x()) << (p.y() - center().y()) << (p.z() - center().z());
+	return ret;
 }

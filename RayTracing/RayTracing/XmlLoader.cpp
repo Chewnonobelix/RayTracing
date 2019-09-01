@@ -33,12 +33,13 @@ Scene XmlLoader::load(QString filename)
 
 	for (int i = 0; i < list.size(); i++)
 	{
-		Sphere s;
+		Sphere* s = new Sphere;
+		GeometryPointer pg(s);
 		auto el = list.at(i).toElement();
 		auto center = el.elementsByTagName("center").at(0).toElement();
 		Point c(center.attribute("x").toDouble(), center.attribute("y").toDouble(), center.attribute("z").toDouble());
-		s.setCenter(c);
-		s.setRadius(el.attribute("radius").toDouble());
+		s->setCenter(c);
+		s->setRadius(el.attribute("radius").toDouble());
 		Material m;
 		auto el2 = el.elementsByTagName("material").at(0).toElement();
 		auto el3 = el2.elementsByTagName("original");
@@ -55,8 +56,8 @@ Scene XmlLoader::load(QString filename)
 		m.setSpecularity(el2.attribute("specularity", "0").toDouble());
 		m.setShininess(el2.attribute("shine", "0").toInt());
 
-		s.setMaterial(m);
-		ret.addGeometry(s);
+		s->setMaterial(m);
+		ret.addGeometry(pg);
 	}
 
 	list = root.elementsByTagName("light");

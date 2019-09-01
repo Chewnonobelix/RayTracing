@@ -11,7 +11,7 @@ Scene::~Scene()
 {
 }
 
-void Scene::addGeometry(Sphere s)
+void Scene::addGeometry(GeometryPointer s)
 {
 	m_geometry << s;
 }
@@ -26,7 +26,7 @@ void Scene::addScreen(Screen s)
 	m_screen = s;
 }
 
-QList<Sphere> Scene::spheres() const
+QList<GeometryPointer> Scene::spheres() const
 {
 	return m_geometry;
 }
@@ -41,11 +41,11 @@ Screen Scene::screen() const
 	return m_screen;
 }
 
-void Scene::sort(QList<Sphere>& list, Point origin) 
+void Scene::sort(QList<GeometryPointer>& list, Point origin)
 {
 	for (int i = 0; i < list.size(); i++)
 		for (int j = i + 1; j < list.size(); j++)
-			if (list[j].distanceTo(origin) < list[i].distanceTo(origin))
+			if (list[j]->distanceTo(origin) < list[i]->distanceTo(origin))
 				list.swapItemsAt(i, j);
 }
 
@@ -53,7 +53,7 @@ void Scene::rayTracing()
 {
 	m_output = QImage(m_screen.width(), m_screen.height(), QImage::Format_RGB32);
 
-	QList<Sphere> ordered = spheres();
+	QList<GeometryPointer> ordered = spheres();
 	Point origin = screen().position();
 	m_output.fill(Qt::black);
 
@@ -73,14 +73,14 @@ void Scene::rayTracing()
 			ray.setOrigin(p);
 
 			sort(ordered, p);
-			Sphere nearest = !m_geometry.isEmpty() ? m_geometry.first() : Sphere();
+			GeometryPointer nearest = !m_geometry.isEmpty() ? m_geometry.first() : GeometryPointer();
 			bool hit = false;
 
 			Point nearestPoint;
 
 			for (auto it = ordered.begin(); !hit && it != ordered.end(); it++)
 			{
-				if (hit = it->intersect(ray, nearestPoint))
+				if (hit = (*it)->intersect(ray, nearestPoint))
 				{
 					QVector<double> vec;
 					vec << nearestPoint.x() - p.x() << nearestPoint.y() - p.y() << nearestPoint.z() - p.z();
@@ -109,21 +109,21 @@ void Scene::rayTracing()
 	}
 }
 
-QColor Scene::recursiveRay(Sphere s, Point init, Point end, int r)
+QColor Scene::recursiveRay(GeometryPointer s, Point init, Point end, int r)
 {
 	if (r == 0)
 		return m_ambient;
 
-	QList<Sphere> ordered = spheres();
+	QList<GeometryPointer> ordered = spheres();
 	
 	sort(ordered, end);
 	QColor ret;
-	ret.setRed(s.material().original().red());
-	ret.setGreen(s.material().original().green());
-	ret.setBlue(s.material().original().blue());
+	ret.setRed(s->material().original().red());
+	ret.setGreen(s->material().original().green());
+	ret.setBlue(s->material().original().blue());
 
-	QVector<double> normalPoint;
-	normalPoint << end.x() - s.center().x() << end.y() - s.center().y() << end.z() - s.center().z();
+	QVector<double> normalPoint = s->normalToPoint(end);
+
 	QVector<double> out;
 	out << init.x() - end.x() << init.y() - end.y() << init.z() - end.z();
 
@@ -153,14 +153,14 @@ QColor Scene::recursiveRay(Sphere s, Point init, Point end, int r)
 
 		bool otherHit = false;
 		Point pt;
-		Sphere nearest = !spheres().isEmpty() ? spheres().first() : Sphere();
+		GeometryPointer nearest = !spheres().isEmpty() ? spheres().first() : GeometryPointer();
 
 		for (auto it2 : spheres())
 		{
-			otherHit = !it2.intersect(ray, pt);
-			otherHit &= (it2.distanceTo(pt) < it2.distanceTo(it.position()));
+			otherHit = !it2->intersect(ray, pt);
+			otherHit &= (it2->distanceTo(pt) < it2->distanceTo(it.position()));
 
-			if (it2.distanceTo(end) < nearest.distanceTo(end))
+			if (it2->distanceTo(end) < nearest->distanceTo(end))
 				nearest = it2;
 		}
 		if (otherHit)
@@ -169,9 +169,9 @@ QColor Scene::recursiveRay(Sphere s, Point init, Point end, int r)
 		}
 		else
 		{
-			QVector<double> normal;
-			normal << (end.x() - s.center().x()) << (end.y() - s.center().y()) << (end.z() - s.center().z());
-			QColor nColor = s.material().combinateLight(out, normal, ray.vector(), QColor(it.red(), it.green(), it.blue()));
+			QVector<double> normal = s->normalToPoint(end);
+
+			QColor nColor = s->material().combinateLight(out, normal, ray.vector(), QColor(it.red(), it.green(), it.blue()));
 
 			int r, nr, g, ng, b, nb;
 			r = ret.red(); g = ret.green(); b = ret.blue();
