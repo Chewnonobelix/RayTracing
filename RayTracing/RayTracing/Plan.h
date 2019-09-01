@@ -1,10 +1,12 @@
 #pragma once
 
 #include <QVector>
+#include <QDebug>
 #include "Point.h"
 #include "Material.h"
+#include "AbstractGeometry.h"
 
-class Plan
+class Plan: public AbstractGeometry
 {
 private:
 	QVector<Point> m_corner;
@@ -22,5 +24,10 @@ public:
 	void setCorners(QVector<Point> c);
 	Material material() const;
 	void setMaterial(Material m);
+
+	bool intersect(const Line& l, Point& nearest) const;
+	double distanceTo(const Point& p) const;
+	QVector<double> normalToPoint(const Point& p) const;
+
 };
 
