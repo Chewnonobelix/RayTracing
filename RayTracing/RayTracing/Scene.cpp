@@ -165,7 +165,13 @@ QColor Scene::recursiveRay(GeometryPointer s, Point init, Point end, int r)
 		}
 		if (otherHit)
 		{
-			recursiveRay(nearest, end, pt, r - 1);
+			QColor nColor = recursiveRay(nearest, end, pt, r - 1);
+			auto normal = nearest->normalToPoint(end);
+			QColor combinated = s->material().combinateLight(out, normal, ray.vector(), QColor(it.red(), it.green(), it.blue()));
+
+			ret.setRed((nColor.red() + combinated.red())/2 < 255 ? (nColor.red() + combinated.red())/2 : 255);
+			ret.setBlue((nColor.blue() + combinated.blue())/2 < 255 ? (nColor.blue() + combinated.blue())/2 : 255);
+			ret.setBlue((nColor.green() + combinated.green())/2 < 255 ? (nColor.green() + combinated.green())/2 : 255);
 		}
 		else
 		{
