@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QDebug>
 #include "Scene.h"
+#include "Plan.h"
 
 class XmlLoader
 {
@@ -13,5 +14,6 @@ public:
 	~XmlLoader();
 
 	Scene load(QString filename);
+	Material loadMaterial(QDomElement el);
 };
 

@@ -11,6 +11,26 @@ XmlLoader::~XmlLoader()
 {
 }
 
+Material XmlLoader::loadMaterial(QDomElement el)
+{
+	Material m;
+	auto el2 = el.elementsByTagName("original");
+	if (!el2.isEmpty())
+	{
+		auto ambient = el2.at(0).toElement();
+		QColor a;
+		a.setRed(ambient.attribute("red").toInt());
+		a.setGreen(ambient.attribute("green").toInt());
+		a.setBlue(ambient.attribute("blue").toInt());
+		m.setOriginal(a);
+	}
+	m.setDiffuse(el.attribute("diffuse", "0").toDouble());
+	m.setSpecularity(el.attribute("specularity", "0").toDouble());
+	m.setShininess(el.attribute("shine", "0").toInt());
+
+	return m;
+}
+
 Scene XmlLoader::load(QString filename)
 {
 	Scene ret;
@@ -42,22 +62,35 @@ Scene XmlLoader::load(QString filename)
 		s->setRadius(el.attribute("radius").toDouble());
 		Material m;
 		auto el2 = el.elementsByTagName("material").at(0).toElement();
-		auto el3 = el2.elementsByTagName("original");
-		if (!el3.isEmpty())
-		{
-			auto ambient = el3.at(0).toElement();
-			QColor a;
-			a.setRed(ambient.attribute("red").toInt());
-			a.setGreen(ambient.attribute("green").toInt());
-			a.setBlue(ambient.attribute("blue").toInt());
-			m.setOriginal(a);
-		}
-		m.setDiffuse(el2.attribute("diffuse", "0").toDouble());
-		m.setSpecularity(el2.attribute("specularity", "0").toDouble());
-		m.setShininess(el2.attribute("shine", "0").toInt());
-
+		m = loadMaterial(el2);
 		s->setMaterial(m);
 		ret.addGeometry(pg);
+	}
+
+	list = root.elementsByTagName("plan");
+
+	for (int i = 0; i < list.size(); i++)
+	{
+		auto el = list.at(i).toElement();
+		auto el2 = el.elementsByTagName("material").at(0).toElement();
+		Material m = loadMaterial(el2);
+		Plan* p = new Plan;
+		GeometryPointer gp(p);
+		gp->setMaterial(m);
+
+		auto el3 = el.elementsByTagName("corner");
+		QVector<Point> corners;
+		for (auto j = 0; j < el3.size(); j++)
+		{
+			Point c;
+			auto el4 = el3.at(j).toElement();
+			c.setX(el4.attribute("x", "0").toInt());
+			c.setY(el4.attribute("y", "0").toInt());
+			c.setZ(el4.attribute("z", "0").toInt());
+			corners << c;
+		}
+		p->setCorners(corners);
+		ret.addGeometry(gp);
 	}
 
 	list = root.elementsByTagName("light");
