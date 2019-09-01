@@ -93,10 +93,12 @@
     </QtMoc>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractGeometry.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Plan.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Screen.cpp" />
@@ -104,9 +106,11 @@
     <ClCompile Include="XmlLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractGeometry.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="Plan.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Screen.h" />

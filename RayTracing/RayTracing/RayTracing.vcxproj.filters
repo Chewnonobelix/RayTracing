@@ -53,6 +53,12 @@
     <ClCompile Include="Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Plan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AbstractGeometry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Line.h">
@@ -77,6 +83,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Plan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractGeometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
